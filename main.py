@@ -26,7 +26,7 @@ def start(update, context):
         user_data[chat_id] = {"balance": 0, "last_claim": 0}
         with open(USERDATA_FILE, "w") as f:
             json.dump(user_data, f)
-    update.message.reply_text("🦖 Welcome to Dino Hunter Mining!\nType /claim to start mining GBLN!")
+    update.message.reply_text("🦖 Welcome to Dino Hunter Mining!\nType /claim to start mining DINO!")
 
 def claim(update, context):
     chat_id = str(update.effective_user.id)
@@ -36,14 +36,14 @@ def claim(update, context):
     user_data[chat_id]["balance"] += 10  # mining reward
     with open(USERDATA_FILE, "w") as f:
         json.dump(user_data, f)
-    update.message.reply_text(f"✅ Claimed 10 GBLN!\nYour balance: {user_data[chat_id]['balance']} GBLN")
+    update.message.reply_text(f"✅ Claimed 10 DINO!\nYour balance: {user_data[chat_id]['balance']} DINO")
 
 dispatcher.add_handler(CommandHandler("start", start))
 dispatcher.add_handler(CommandHandler("claim", claim))
 
 # Webhook handler
-@app.route(f"/{TOKEN}", methods=["POST"])
+@app.route("/webhook", methods=["POST"])
 def webhook():
-    update = Update.de_json(request.get_json(force=True), bot)
+    update = Update.de_json(request.get_json(force=True))
     dispatcher.process_update(update)
     return "ok"
